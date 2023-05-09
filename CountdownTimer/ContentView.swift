@@ -8,26 +8,41 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var countdownTimer = 5
+    @State var timerRunning = false
+    
+    // Creating a timer variable
+    // NOTE: The every property determines the Time Interval. The on property determines the strain the timer runs on. The in property determines the type of timer used. Finally, autoconnect allows the timer to run.
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
     var body: some View {
         VStack {
             Text("Countdown Timer")
                 .font(.largeTitle)
                 .fontWeight(.bold)
             
-            Text("5")
+            Text(String(countdownTimer))
+                .onReceive(timer) { _ in
+                    if (countdownTimer > 0 && timerRunning){
+                        countdownTimer -= 1
+                    } else {
+                        timerRunning = false
+                    }
+                }
                 .font(.title)
                 .fontWeight(.bold)
             
             HStack {
                 
                 Button {
-                    print("Hello World")
+                    timerRunning = true
                 } label: {
                     Text("START")
                 }
                 
                 Button {
-                    print("Hello World")
+                    countdownTimer = 5
                 } label: {
                     Text("RESET")
                         .foregroundColor(Color.red)
